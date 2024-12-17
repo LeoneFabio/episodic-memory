@@ -258,6 +258,10 @@ class Ego4DClip(data.Dataset):
                 torch.save(feature, self.data_dir + "/rnd/{}.pt".format(vid))
 
             features = torch.tensor(feature).float()
+        elif "omnivore_video_swinl_fp16" == config.DATASET.VIS_INPUT_TYPE:
+            feature = torch.load(self.data_dir + "/Omnivore_features/{}.pt".format(vid))
+            features = torch.tensor(feature).float()
+            fps = 30.0/16 # Omnivore features are extracted from canonical videos of 30FPS with a stride of 16 that means --> 30/16 = 1.875 FPS
         else:
             raise NotImplementedError()
 
