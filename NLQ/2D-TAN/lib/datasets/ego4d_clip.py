@@ -96,6 +96,7 @@ class Ego4DClip(data.Dataset):
                                             query_times[1] - w_start,
                                         ],
                                         'query_uid': anno_uid+'_'+query["query"],
+                                        "query_idx": query_idx,
                                     }
                                     if w_start < clip_duration:
                                         anno_pairs.append(new_anno)
@@ -158,7 +159,7 @@ class Ego4DClip(data.Dataset):
         if query_idx is None:
             print(f"Missing query_idx at index {index}")
 
-        
+
         video_id = self.annotations[index]["video"]
         video_duration = self.annotations[index]["clip_duration"]
 
