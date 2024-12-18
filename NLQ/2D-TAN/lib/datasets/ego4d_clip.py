@@ -87,6 +87,7 @@ class Ego4DClip(data.Dataset):
                                         continue
                                     new_anno = {
                                         "video": video_name,
+                                        "clip": clip_uid, 
                                         "clip_se": clip_times, # tart": clip_times[0],
                                         "description": query["query"],
                                         "window": [w_start, w_start + self.window],
