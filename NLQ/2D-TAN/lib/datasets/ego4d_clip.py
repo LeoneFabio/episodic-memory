@@ -150,6 +150,15 @@ class Ego4DClip(data.Dataset):
         self.bert_model = BertModel.from_pretrained("bert-base-uncased").cuda()
 
     def __getitem__(self, index):
+
+        """CHECK QUERTY_IDX"""
+        annotation = self.annotations[index]
+        print(f"Keys in annotation at index {index}: {annotation.keys()}")
+        query_idx = annotation.get("query_idx", None)
+        if query_idx is None:
+            print(f"Missing query_idx at index {index}")
+
+        
         video_id = self.annotations[index]["video"]
         video_duration = self.annotations[index]["clip_duration"]
 
