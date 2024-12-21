@@ -155,7 +155,6 @@ class Ego4DClip(data.Dataset):
 
         """CHECK QUERTY_IDX"""
         annotation = self.annotations[index]
-        print(f"Keys in annotation at index {index}: {annotation.keys()}")
         query_idx = annotation.get("query_idx", None)
         if query_idx is None:
             print(f"Missing query_idx at index {index}")
