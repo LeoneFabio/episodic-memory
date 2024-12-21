@@ -104,6 +104,7 @@ if __name__ == '__main__':
     if config.TEST.EVAL_TRAIN:
         eval_train_dataset = getattr(datasets, dataset_name)('train')
     if not config.DATASET.NO_VAL:
+        print("Validation set is used for model selection.", flush=True)
         val_dataset = getattr(datasets, dataset_name)('val')
     test_dataset = getattr(datasets, dataset_name)('test')
 

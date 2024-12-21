@@ -10,16 +10,16 @@ DATASET:
   NAME: Ego4DClip
   VIS_INPUT_TYPE: omnivore_video_swinl_fp16  # Updated for Omnivore
   NO_VAL: False
-  NUM_SAMPLE_CLIPS: 10
+  NUM_SAMPLE_CLIPS: 40
   TARGET_STRIDE: 1
   NORMALIZE: True
   RANDOM_SAMPLING: True
-  WINDOW: 10 # we use 10s window to cut the videos
+  WINDOW: 40 # we use 40s window to cut the videos
 
 TEST:
-  BATCH_SIZE: 8
-  RECALL: 1
-  TIOU: 0.5
+  BATCH_SIZE: 16
+  RECALL: 1,5
+  TIOU: 0.3,0.5
   EVAL_TRAIN: True
   NMS_THRESH: 0.5
 
@@ -28,7 +28,7 @@ CUDNN:
   BENCHMARK: True
 
 TRAIN:
-  BATCH_SIZE: 8
+  BATCH_SIZE: 32
   LR: 0.025
   WEIGHT_DECAY: 0.0000
   MAX_EPOCH: 1
@@ -46,36 +46,36 @@ TAN:
     NAME: FrameAvgPool
     PARAMS:
       INPUT_SIZE: 1536  # Match Omnivore Video Swin-L feature dimension
-      HIDDEN_SIZE: 64  # As MAX_POS_LEN in VSLNet
+      HIDDEN_SIZE: 128  # As MAX_POS_LEN in VSLNet
       KERNEL_SIZE: 1
       STRIDE: 1
 
   PROP_MODULE:
     NAME: SparsePropMaxPool
     PARAMS:
-      NUM_SCALE_LAYERS: [8,4,4]
+      NUM_SCALE_LAYERS: [16,8,8]
 
   FUSION_MODULE:
     NAME: BaseFusion
     PARAMS:
-      HIDDEN_SIZE: 64  # Match DIM=128
+      HIDDEN_SIZE: 128  # Match DIM=128
       TXT_INPUT_SIZE: 300
       TXT_HIDDEN_SIZE: 768
       LSTM:
-        NUM_LAYERS: 1
+        NUM_LAYERS: 3
         BIDIRECTIONAL: False
 
   MAP_MODULE:
     NAME: MapConv
     PARAMS:
-      INPUT_SIZE: 64  # Match reduced HIDDEN_SIZE
-      HIDDEN_SIZES: [64, 64]
-      KERNEL_SIZES: [3, 3]
-      STRIDES: [1, 1]
-      PADDINGS: [1, 1]
-      DILATIONS: [1, 1]
+      INPUT_SIZE: 128  # Match reduced HIDDEN_SIZE
+      HIDDEN_SIZES: [128, 128, 128, 128]
+      KERNEL_SIZES: [9, 9, 9, 9]
+      STRIDES: [1, 1, 1, 1]
+      PADDINGS: [16, 0, 0, 0]
+      DILATIONS: [1, 1, 1, 1]
 
-  PRED_INPUT_SIZE: 64 # Match reduced DIM size
+  PRED_INPUT_SIZE: 128 # Match reduced DIM size
 
 MODEL:
   NAME: TAN
