@@ -1,5 +1,5 @@
 WORKERS: 0
-DEBUG: False
+DEBUG: True
 
 MODEL_DIR: ./checkpoints
 RESULT_DIR: ./results

@@ -104,10 +104,16 @@ class Ego4DClip(data.Dataset):
 
                         else:  # for val/test set, we need to process all windows
                             if split == 'val':
-                                if self.min_duration > query_duration or query_duration > self.window or (
+                                '''if self.min_duration > query_duration or query_duration > self.window or (
                                     self.debug and video_count > 1 # only for debug
                                 ):
-                                    break
+                                    break'''
+                                #Relax the constraints for the val set
+                                if query_duration > self.window:
+                                    query_duration = self.window  # Truncate long queries
+                                elif query_duration < self.min_duration:
+                                    query_duration = self.min_duration  # Pad short queries
+
                             else: # test set does not remove any query
                                 query_loop_count += 1
                                 new_anno = None
