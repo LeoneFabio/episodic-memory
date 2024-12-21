@@ -79,6 +79,12 @@ def reset_config(config, args):
 
 if __name__ == '__main__':
 
+    if torch.cuda.is_available():
+        print(f"Using GPU: {torch.cuda.get_device_name(torch.cuda.current_device())}")
+    else:
+        print("Running on CPU")
+
+
     args = parse_args()
     reset_config(config, args)
 
@@ -188,6 +194,8 @@ if __name__ == '__main__':
         state['test_interval'] = int(len(train_dataset)/config.TRAIN.BATCH_SIZE*config.TEST.INTERVAL)
         state['t'] = 1
         model.train()
+        print("Training started...")
+        print(f"Total steps per epoch: {len(iterator('train'))}")
         if config.VERBOSE:
             state['progress_bar'] = tqdm(total=state['test_interval'])
 
@@ -200,6 +208,7 @@ if __name__ == '__main__':
             state['progress_bar'].update(1)
 
         if state['t'] % state['test_interval'] == 0:
+            print(f"Iteration {state['t']} - Average Training Loss: {state['loss_meter'].avg:.4f}")
             model.eval()
             if config.VERBOSE:
                 state['progress_bar'].close()
@@ -264,6 +273,7 @@ if __name__ == '__main__':
 
 
     def on_test_start(state):
+        print(f"Starting evaluation on {state['split']} set...")
         state['loss_meter'] = AverageMeter()
         state['sorted_segments_list'] = []
         if config.VERBOSE:
@@ -287,9 +297,12 @@ if __name__ == '__main__':
         state['sorted_segments_list'].extend(sorted_segments)
 
     def on_test_end(state):
+        print(f"Evaluation complete for {state['split']} set.")
         annotations = state['iterator'].dataset.annotations
         merge = (state['split'] != 'train')
         state['Rank@N,mIoU@M'], state['miou'] = eval.eval_predictions(state['sorted_segments_list'], annotations, verbose=False, merge_window=merge)
+        print(f"Rank@N,mIoU@M: {state['Rank@N,mIoU@M']}")
+        print(f"Mean IoU: {state['miou']:.4f}")
         if config.VERBOSE:
             state['progress_bar'].close()
 
