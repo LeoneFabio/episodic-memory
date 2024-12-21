@@ -103,12 +103,17 @@ class Ego4DClip(data.Dataset):
                                         anno_pairs.append(new_anno)
 
                         else:  # for val/test set, we need to process all windows
-                            if split == 'val':
-                                print('Processing val set', flush=True)
-                                '''if self.min_duration > query_duration or query_duration > self.window or (
+                            '''if split == 'val':
+                                if self.min_duration > query_duration or query_duration > self.window or (
                                     self.debug and video_count > 1 # only for debug
                                 ):
                                     break'''
+                            if split == 'val':
+                                print(f"Number of videos in val set: {len(anno_json['videos'])}")
+                                for video in anno_json["videos"]:
+                                    print(f"Video: {video['video_uid']} has {len(video['clips'])} clips")
+                                    for clip in video["clips"]:
+                                        print(f"Clip has {len(clip['annotations'])} annotations")
                             else: # test set does not remove any query
                                 query_loop_count += 1
                                 new_anno = None
