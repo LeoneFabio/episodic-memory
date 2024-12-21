@@ -27,7 +27,7 @@ class Ego4DClip(data.Dataset):
         self.data_dir = config.DATA_DIR
         self.split = split
         self.window = config.DATASET.WINDOW
-        self.min_duration = 0 if split=='test' else 3 # discard moments less than 3 seconds
+        self.min_duration = 0 if split=='test' else 0 # discard moments less than 0 seconds
         stride = int(self.window / 2)  # windows overlap by half
 
         self.debug = config.DEBUG
@@ -104,16 +104,11 @@ class Ego4DClip(data.Dataset):
 
                         else:  # for val/test set, we need to process all windows
                             if split == 'val':
-                                '''if self.min_duration > query_duration or query_duration > self.window or (
+                                if self.min_duration > query_duration or query_duration > self.window:
+                                    '''or (
                                     self.debug and video_count > 1 # only for debug
-                                ):
-                                    break'''
-                                #Relax the constraints for the val set
-                                if query_duration > self.window:
-                                    query_duration = self.window  # Truncate long queries
-                                elif query_duration < self.min_duration:
-                                    query_duration = self.min_duration  # Pad short queries
-
+                                ):'''
+                                    break
                             else: # test set does not remove any query
                                 query_loop_count += 1
                                 new_anno = None
