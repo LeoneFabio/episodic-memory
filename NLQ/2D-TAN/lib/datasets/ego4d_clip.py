@@ -43,6 +43,7 @@ class Ego4DClip(data.Dataset):
         with open(anno_path) as f:
             anno_json = json.load(f)
 
+        TRAIN_SUBSET_SIZE = 2
         anno_pairs = []
         query_loop_count = 0
         for video_count, anno_video in enumerate(anno_json["videos"]):
@@ -65,7 +66,7 @@ class Ego4DClip(data.Dataset):
 
                         if split == "train":  # split to windows
                             if self.min_duration <= query_duration < self.window and (
-                                not self.debug or video_count < 8
+                                not self.debug or video_count < TRAIN_SUBSET_SIZE
                             ):
                                 # find the new start and end time in the window
                                 first_window_start = np.ceil((query_times[0] - self.window) / stride) * stride
@@ -103,17 +104,14 @@ class Ego4DClip(data.Dataset):
                                         anno_pairs.append(new_anno)
 
                         else:  # for val/test set, we need to process all windows
-                            '''if split == 'val':
-                                if self.min_duration > query_duration or query_duration > self.window or (
-                                    self.debug and video_count > 1 # only for debug
-                                ):
-                                    break'''
                             if split == 'val':
-                                print(f"Number of videos in val set: {len(anno_json['videos'])}")
-                                for video in anno_json["videos"]:
-                                    print(f"Video: {video['video_uid']} has {len(video['clips'])} clips")
-                                    for clip in video["clips"]:
-                                        print(f"Clip has {len(clip['annotations'])} annotations")
+                                if self.min_duration > query_duration or query_duration > self.window: 
+                                    print('Warning! VAL: query duration {} is not in range'.format(query_duration))
+                                    break
+                                '''or (
+                                    self.debug and video_count > VAL_SUBSET_SIZE # only for debug
+                                ):'''
+                                
                             else: # test set does not remove any query
                                 query_loop_count += 1
                                 new_anno = None
@@ -158,13 +156,6 @@ class Ego4DClip(data.Dataset):
         self.bert_model = BertModel.from_pretrained("bert-base-uncased").cuda()
 
     def __getitem__(self, index):
-
-        """CHECK QUERTY_IDX"""
-        annotation = self.annotations[index]
-        query_idx = annotation.get("query_idx", None)
-        if query_idx is None:
-            print(f"Missing query_idx at index {index}")
-
 
         video_id = self.annotations[index]["video"]
         video_duration = self.annotations[index]["clip_duration"]
