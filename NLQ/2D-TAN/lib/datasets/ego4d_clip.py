@@ -105,7 +105,7 @@ class Ego4DClip(data.Dataset):
                         else:  # for val/test set, we need to process all windows
                             #if split == 'val':
                             if self.min_duration > query_duration or query_duration > self.window or (
-                                self.debug and video_count > 1 # only for debug
+                                False #self.debug and video_count > 1 # only for debug
                             ):
                                 break
                                 
