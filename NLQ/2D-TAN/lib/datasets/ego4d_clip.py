@@ -44,6 +44,8 @@ class Ego4DClip(data.Dataset):
             anno_json = json.load(f)
 
         TRAIN_SUBSET_SIZE = 2
+        val_out_of_range = 0
+        num_of_val = 0
         anno_pairs = []
         query_loop_count = 0
         for video_count, anno_video in enumerate(anno_json["videos"]):
@@ -105,8 +107,11 @@ class Ego4DClip(data.Dataset):
 
                         else:  # for val/test set, we need to process all windows
                             if split == 'val':
+                                num_of_val += 1
+                                print('num_of_val:', num_of_val)
                                 if self.min_duration > query_duration or query_duration > self.window: 
-                                    print('Warning! VAL: query duration {} is not in range'.format(query_duration))
+                                    val_out_of_range += 1
+                                    print('Warning! Val query duration out of range: ', val_out_of_range)
                                     break
                                 '''or (
                                     self.debug and video_count > VAL_SUBSET_SIZE # only for debug
