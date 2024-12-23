@@ -45,7 +45,6 @@ class Ego4DClip(data.Dataset):
 
         TRAIN_SUBSET_SIZE = 8
         anno_pairs = []
-        query_loop_count = 0
         for video_count, anno_video in enumerate(anno_json["videos"]):
             video_name = anno_video['video_uid'] # anno_clip["clip_uid"]
             for anno_clip in anno_video["clips"]:
@@ -104,18 +103,17 @@ class Ego4DClip(data.Dataset):
                                         anno_pairs.append(new_anno)
 
                         else:  # for val/test set, we need to process all windows
-                            if split == 'val':
-                                if self.min_duration > query_duration or query_duration > self.window or (
-                                    self.debug and video_count > 1 # only for debug
-                                ):
-                                    break
+                            #if split == 'val':
+                            if self.min_duration > query_duration or query_duration > self.window or (
+                                self.debug and video_count > 1 # only for debug
+                            ):
+                                break
                                 
-                            else: # test set does not remove any query
+                            '''else: # test set does not remove any query
                                 # TODO: Implement this part later
-                                pass
+                                pass'''
 
                             #both val and test set
-                            query_loop_count += 1
                             new_anno = None
                             if int(clip_duration) - self.window + stride <= stride:
                                 print('warning:', int(clip_duration), self.window, stride)
@@ -151,7 +149,6 @@ class Ego4DClip(data.Dataset):
         for anno in anno_pairs:
             all_query_set.add(anno['query_uid'])
         print(" -- number of queries: {}".format(len(all_query_set)))
-        print(" -- query loop count: {}".format(query_loop_count))
         self.annotations = anno_pairs
         self.cache_bert_feature = dict()
         self.tokenizer = BertTokenizer.from_pretrained("bert-base-uncased")
