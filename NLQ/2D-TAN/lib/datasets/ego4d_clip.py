@@ -102,18 +102,10 @@ class Ego4DClip(data.Dataset):
                                     if w_start < clip_duration:
                                         anno_pairs.append(new_anno)
 
-                        else:  # for val/test set, we need to process all windows
-                            #if split == 'val':
-                            if self.min_duration > query_duration or query_duration > self.window or (
-                                False #self.debug and video_count > 1 # only for debug
-                            ):
+                        else:  # val and test set
+                            if self.min_duration > query_duration or query_duration >= self.window:
                                 break
                                 
-                            '''else: # test set does not remove any query
-                                # TODO: Implement this part later
-                                pass'''
-
-                            #both val and test set
                             new_anno = None
                             if int(clip_duration) - self.window + stride <= stride:
                                 print('warning:', int(clip_duration), self.window, stride)

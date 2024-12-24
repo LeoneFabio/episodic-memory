@@ -1,5 +1,5 @@
 WORKERS: 0
-DEBUG: False
+DEBUG: True
 
 MODEL_DIR: ./checkpoints
 RESULT_DIR: ./results
@@ -13,7 +13,7 @@ DATASET:
   NUM_SAMPLE_CLIPS: 40
   TARGET_STRIDE: 1
   NORMALIZE: True
-  RANDOM_SAMPLING: False
+  RANDOM_SAMPLING: True
   WINDOW: 40 # we use 40s window to cut the videos
 
 TEST:
