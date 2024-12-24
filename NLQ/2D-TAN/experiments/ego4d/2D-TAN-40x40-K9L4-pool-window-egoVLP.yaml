@@ -79,4 +79,4 @@ TAN:
 
 MODEL:
   NAME: TAN
-  CHECKPOINT: checkpoints/Ego4DClip/TAN_egoVLP/iter000000-0.0000-0.0000.pkl
+  CHECKPOINT: checkpoints/Ego4DClip/TAN_egoVLP/iter000011-0.0000-0.0000.pkl
