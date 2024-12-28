@@ -255,6 +255,11 @@ def main(configs, parser):
         per_instance_results["average_IoU"] = convert_object_to_list(per_instance_results["average_IoU"])
         per_instance_results["results"] = convert_object_to_list(per_instance_results["results"])
 
+
+        '''Just for debugging purposes'''
+        with open(os.path.join(model_dir, "per_instance_results.txt"), "w") as f:
+            f.write(str(per_instance_results))
+            
         # Save per_instance_results to a JSON file
         with open(os.path.join(model_dir, "per_instance_results.json"), "w") as f:
             json.dump(

@@ -154,9 +154,18 @@ def eval_test(
 def convert_object_to_list(obj):
     if isinstance(obj, np.ndarray):
         return obj.tolist()
+    elif isinstance(obj, np.bool_):
+        return bool(obj)
+    elif isinstance(obj, (np.integer, np.floating)):
+        return obj.item()
     elif isinstance(obj, list):
         return [convert_object_to_list(item) for item in obj]
     elif isinstance(obj, dict):
         return {key: convert_object_to_list(value) for key, value in obj.items()}
     else:
         return obj
+    
+
+    
+    
+    
