@@ -59,10 +59,11 @@ def compute_IoU(pred, gt):
 def evaluate_nlq_performance(
     predictions, ground_truth, thresholds, topK, per_instance=False
 ):
-    """Evalutes the performances."""
+    """Evaluates the performances."""
     gt_dict = {}
     num_gt_queries = 0
 
+    # Prepare ground truth dictionary
     for video_datum in ground_truth["videos"]:
         for clip_datum in video_datum["clips"]:
             clip_uid = clip_datum["clip_uid"]
@@ -74,6 +75,10 @@ def evaluate_nlq_performance(
     results = [[[] for _ in topK] for _ in thresholds]
     average_IoU = []
     num_instances = 0
+
+    # To store the language query and corresponding IoU values
+    query_metrics = []
+
     for pred_datum in predictions:
         key = (pred_datum["clip_uid"], pred_datum["annotation_uid"])
         assert key in gt_dict, "Instance not present!"
@@ -86,24 +91,36 @@ def evaluate_nlq_performance(
             pred_datum["predicted_times"],
             [[gt_query_datum["clip_start_sec"], gt_query_datum["clip_end_sec"]]],
         )
-        average_IoU.append(np.mean(np.sort(overlap[0])[-3:]))
+        avg_iou = np.mean(np.sort(overlap[0])[-3:])
+        average_IoU.append(avg_iou)
+
+        # Store the language query and its IoU value
+        query_metrics.append({
+            "query": gt_query_datum["query"],
+            "iou": avg_iou
+        })
+
         for tt, threshold in enumerate(thresholds):
             for rr, KK in enumerate(topK):
                 results[tt][rr].append((overlap > threshold)[:KK].any())
+
         num_instances += 1
 
     mean_results = np.array(results).mean(axis=-1)
     mIoU = np.mean(average_IoU)
     print(f"Evaluated: {num_instances} / {num_gt_queries} instances")
+
     if per_instance:
         per_instance_results = {
             "overlap": overlap,
             "average_IoU": average_IoU,
             "results": results,
+            "query_metrics": query_metrics  
         }
-        return mean_results, mIoU, per_instance_results
+        return mean_results, mIoU, per_instance_results # Return the query-level metrics if requested
     else:
         return mean_results, mIoU
+
 
 
 def main(args):
