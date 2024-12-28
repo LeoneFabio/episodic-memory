@@ -20,6 +20,7 @@ from utils.runner_utils import (
     filter_checkpoints,
     get_last_checkpoint,
     set_th_config,
+    convert_object_to_list,
 )
 from utils.evaluate_ego4d_nlq import evaluate_nlq_performance
 import json
@@ -250,6 +251,8 @@ def main(configs, parser):
         results, mIoU, per_instance_results = evaluate_nlq_performance(best_predictions, ground_truth, [0.3], [1], per_instance=True)
 
         # Save per_instance_results to a json file
+        per_instance_results = convert_object_to_list(per_instance_results)
+        
         with open(os.path.join(model_dir, "per_instance_results.json"), "w") as f:
             json.dump(
                 {

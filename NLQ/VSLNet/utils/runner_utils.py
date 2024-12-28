@@ -148,3 +148,15 @@ def eval_test(
         mIoU = None
         display_results = None
     return results, mIoU, display_results
+
+
+# Function to recursively convert objects to lists
+def convert_object_to_list(obj):
+    if isinstance(obj, np.ndarray):
+        return obj.tolist()
+    elif isinstance(obj, list):
+        return [convert_object_to_list(item) for item in obj]
+    elif isinstance(obj, dict):
+        return {key: convert_object_to_list(value) for key, value in obj.items()}
+    else:
+        return obj
