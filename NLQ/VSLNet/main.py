@@ -21,6 +21,8 @@ from utils.runner_utils import (
     get_last_checkpoint,
     set_th_config,
 )
+from utils.evaluate_ego4d_nlq import evaluate_nlq_performance
+import json
 
 
 def main(configs, parser):
@@ -109,6 +111,8 @@ def main(configs, parser):
         )
         print("start training...", flush=True)
         global_step = 0
+        best_model_step = {'epoch': 0, 'step': 0} # useful to retrieve the 50 best-performing queries from the best model
+
         for epoch in range(configs.epochs):
             model.train()
             for data in tqdm(
@@ -215,6 +219,8 @@ def main(configs, parser):
                     # Recall@1, 0.3 IoU overlap --> best metric.
                     if results[0][0] >= best_metric:
                         best_metric = results[0][0]
+                        best_model_step['epoch'] = epoch
+                        best_model_step['step'] = global_step
                         torch.save(
                             model.state_dict(),
                             os.path.join(
@@ -227,6 +233,28 @@ def main(configs, parser):
                     model.train()
             
         score_writer.close()
+
+        # Retrieve predictions from the best model
+        # Predictions are in result_save_path/{configs.model_name}_{best_model_step['epoch']}_{best_model_step['step']}_preds.json
+        # Retrieve all predictions from the json file just accessing results key
+        best_predictions = load_json(os.path.join(result_save_path, f"{configs.model_name}_{best_model_step['epoch']}_{best_model_step['step']}_preds.json"))["results"]
+
+        # Retrieve the 50 best-performing queries from the best model
+        ground_truth = load_json(configs.eval_gt_json)
+        results, mIoU, per_instance_results = evaluate_nlq_performance(best_predictions, ground_truth, [0.3], [1], per_instance=True)
+
+        # Save per_instance_results to a json file
+        with open(os.path.join(model_dir, "per_instance_results.json"), "w") as f:
+            json.dump(
+                {
+                    "version": "1.0",
+                    "challenge": "ego4d_nlq_challenge",
+                    "per_instance_results": per_instance_results,
+                }, f
+            )
+
+        
+
 
     elif configs.mode.lower() == "test":
         if not os.path.exists(model_dir):
