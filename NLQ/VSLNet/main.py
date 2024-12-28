@@ -237,7 +237,13 @@ def main(configs, parser):
         # Retrieve predictions from the best model
         # Predictions are in result_save_path/{configs.model_name}_{best_model_step['epoch']}_{best_model_step['step']}_preds.json
         # Retrieve all predictions from the json file just accessing results key
-        best_predictions = load_json(os.path.join(result_save_path, f"{configs.model_name}_{best_model_step['epoch']}_{best_model_step['step']}_preds.json"))["results"]
+        path_best_model = os.path.join(
+                        model_dir,
+                        f"{configs.model_name}_{best_model_step['epoch']}_{best_model_step['step']}_preds.json",
+                    )
+        best_predictions = load_json(path_best_model)["results"]
+
+        
 
         # Retrieve the 50 best-performing queries from the best model
         ground_truth = load_json(configs.eval_gt_json)
