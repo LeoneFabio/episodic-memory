@@ -73,11 +73,11 @@ def evaluate_nlq_performance(
                 num_gt_queries += len(ann_datum["language_queries"])
 
     results = [[[] for _ in topK] for _ in thresholds]
-    average_IoU = []
+    queries_IoU = []
     num_instances = 0
 
     # To store the language query and corresponding IoU values
-    query_metrics = []
+    query_IoU = []
 
     for pred_datum in predictions:
         key = (pred_datum["clip_uid"], pred_datum["annotation_uid"])
@@ -91,13 +91,13 @@ def evaluate_nlq_performance(
             pred_datum["predicted_times"],
             [[gt_query_datum["clip_start_sec"], gt_query_datum["clip_end_sec"]]],
         )
-        avg_iou = np.mean(np.sort(overlap[0])[-3:])
-        average_IoU.append(avg_iou)
+        IoU = np.mean(np.sort(overlap[0])[-3:]) # IoU of a query, considering the mean of top-3 overlap values --> this is because a single query can have multiple predictions
+        queries_IoU.append(IoU)
 
         # Store the language query and its IoU value
-        query_metrics.append({
+        query_IoU.append({
             "query": gt_query_datum["query"],
-            "iou": avg_iou
+            "IoU": IoU
         })
 
         for tt, threshold in enumerate(thresholds):
@@ -107,15 +107,12 @@ def evaluate_nlq_performance(
         num_instances += 1
 
     mean_results = np.array(results).mean(axis=-1)
-    mIoU = np.mean(average_IoU)
+    mIoU = np.mean(queries_IoU)
     print(f"Evaluated: {num_instances} / {num_gt_queries} instances")
 
     if per_instance:
         per_instance_results = {
-            "overlap": overlap,
-            "average_IoU": average_IoU,
-            "results": results,
-            "query_metrics": query_metrics  
+            "queries_IoU": query_IoU  
         }
         return mean_results, mIoU, per_instance_results # Return the query-level metrics if requested
     else:

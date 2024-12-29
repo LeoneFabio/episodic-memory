@@ -250,19 +250,17 @@ def main(configs, parser):
         ground_truth = load_json(configs.eval_gt_json)
         results, mIoU, per_instance_results = evaluate_nlq_performance(best_predictions, ground_truth, [0.3], [1], per_instance=True)
 
-        # Convert numpy types in per_instance_results, excluding query_metrics
-        per_instance_results["overlap"] = convert_object_to_list(per_instance_results["overlap"])
-        per_instance_results["average_IoU"] = convert_object_to_list(per_instance_results["average_IoU"])
-        per_instance_results["results"] = convert_object_to_list(per_instance_results["results"])
-
 
         # Save per_instance_results to a JSON file
-        with open(os.path.join(model_dir, "per_instance_results.json"), "w") as f:
+        with open(os.path.join(model_dir, "queries_results.json"), "w") as f:
             json.dump(
                 {
                     "version": "1.0",
                     "challenge": "ego4d_nlq_challenge",
-                    "per_instance_results": per_instance_results,
+                    "best_eval_model": best_model_step,
+                    "topK": 1,
+                    "threshold IoU": 0.3,
+                    "queries_results": per_instance_results,
                 }, 
                 f,
                 indent=4  # To make the JSON human-readable
