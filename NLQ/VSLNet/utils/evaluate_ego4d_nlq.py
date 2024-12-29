@@ -77,7 +77,7 @@ def evaluate_nlq_performance(
     num_instances = 0
 
     # To store the language query and corresponding IoU values
-    query_IoU = []
+    queries_IoU = []
 
     for pred_datum in predictions:
         key = (pred_datum["clip_uid"], pred_datum["annotation_uid"])
@@ -95,7 +95,7 @@ def evaluate_nlq_performance(
         queries_IoU.append(IoU)
 
         # Store the language query and its IoU value
-        query_IoU.append({
+        queries_IoU.append({
             "query": gt_query_datum["query"],
             "IoU": IoU
         })
@@ -112,9 +112,9 @@ def evaluate_nlq_performance(
 
     if per_instance:
         per_instance_results = {
-            "queries_IoU": query_IoU  
+            "queries_IoU": queries_IoU  
         }
-        return mean_results, mIoU, per_instance_results # Return the query-level metrics if requested
+        return mean_results, mIoU, per_instance_results # Return the query-level results if requested
     else:
         return mean_results, mIoU
 

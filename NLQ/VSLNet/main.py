@@ -237,7 +237,7 @@ def main(configs, parser):
 
         # Retrieve predictions from the best model
         # Predictions are in result_save_path/{configs.model_name}_{best_model_step['epoch']}_{best_model_step['step']}_preds.json
-        # Retrieve all predictions from the json file just accessing results key
+        # Retrieve all predictions from the json file just accessing results field
         path_best_model = os.path.join(
                         model_dir,
                         f"{configs.model_name}_{best_model_step['epoch']}_{best_model_step['step']}_preds.json",
@@ -246,10 +246,9 @@ def main(configs, parser):
 
         
 
-        # Retrieve the 50 best-performing queries from the best model
+        # Retrieve queries results from the best model
         ground_truth = load_json(configs.eval_gt_json)
         results, mIoU, per_instance_results = evaluate_nlq_performance(best_predictions, ground_truth, [0.3], [1], per_instance=True)
-
 
         # Save per_instance_results to a JSON file
         with open(os.path.join(model_dir, "queries_results.json"), "w") as f:
@@ -266,6 +265,27 @@ def main(configs, parser):
                 indent=4  # To make the JSON human-readable
             )
 
+        '''# Save the top 50 queries to a new file'''
+        # Extract queries and IoU values
+        query_info = per_instance_results["queries_IoU"]
+        # Sort queries by IoU in descending order
+        sorted_queries = sorted(query_info, key=lambda x: x["IoU"], reverse=True)
+        # Retrieve the top 50 queries
+        top_50_queries = sorted_queries[:50]
+        # Save the top 50 queries to a new file
+        with open(os.path.join(model_dir, "top_50_queries.json"), "w") as f:
+            json.dump(
+                {
+                    "version": "1.0",
+                    "challenge": "ego4d_nlq_challenge",
+                    "best_eval_model": best_model_step,
+                    "topK": 1,
+                    "threshold IoU": 0.3,
+                    "top_50_queries": top_50_queries,
+                },
+                f,
+                indent=4,
+            )
         
 
 
