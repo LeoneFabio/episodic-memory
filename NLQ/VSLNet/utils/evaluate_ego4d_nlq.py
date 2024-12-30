@@ -76,8 +76,8 @@ def evaluate_nlq_performance(
     all_IoUs = []
     num_instances = 0
 
-    # To store the language query and corresponding IoU values
-    queries_IoU = []
+    # To store the language query, IoU value, best prediction and other useful info about the query
+    queries = []
 
     for pred_datum in predictions:
         key = (pred_datum["clip_uid"], pred_datum["annotation_uid"])
@@ -94,10 +94,21 @@ def evaluate_nlq_performance(
         IoU = np.mean(np.sort(overlap[0])[-3:]) # IoU of a query, considering the mean of top-3 overlap values --> this is because a single query can have multiple predictions
         all_IoUs.append(IoU)
 
+
+        # Find the Index of the Maximum IoU:
+        max_index = np.argmax(overlap[0])
+        # Retrieve the best prediction for the query
+        best_prediction = pred_datum["predicted_times"][max_index]
+
+        # Retrieve the clip_uid associated with the query
+        clip_uid = pred_datum["clip_uid"] 
+
         # Store the language query and its IoU value
-        queries_IoU.append({
+        queries.append({
             "query": gt_query_datum["query"],
-            "IoU": IoU
+            "IoU": IoU,
+            "best_prediction": best_prediction,
+            "clip_uid": clip_uid
         })
 
         for tt, threshold in enumerate(thresholds):
@@ -112,7 +123,7 @@ def evaluate_nlq_performance(
 
     if per_instance:
         per_instance_results = {
-            "queries_IoU": queries_IoU  
+            "queries": queries  
         }
         return mean_results, mIoU, per_instance_results # Return the query-level results if requested
     else:

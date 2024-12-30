@@ -20,7 +20,6 @@ from utils.runner_utils import (
     filter_checkpoints,
     get_last_checkpoint,
     set_th_config,
-    convert_object_to_list,
 )
 from utils.evaluate_ego4d_nlq import evaluate_nlq_performance
 import json
@@ -257,9 +256,7 @@ def main(configs, parser):
                     "version": "1.0",
                     "challenge": "ego4d_nlq_challenge",
                     "best_eval_model": best_model_step,
-                    "topK": 1,
-                    "threshold IoU": 0.3,
-                    "queries_results": per_instance_results,
+                    **per_instance_results,
                 }, 
                 f,
                 indent=4  # To make the JSON human-readable
@@ -267,7 +264,7 @@ def main(configs, parser):
 
         '''# Save the top 50 queries to a new file'''
         # Extract queries and IoU values
-        query_info = per_instance_results["queries_IoU"]
+        query_info = per_instance_results["queries"]
         # Sort queries by IoU in descending order
         sorted_queries = sorted(query_info, key=lambda x: x["IoU"], reverse=True)
         # Retrieve the top 50 queries
@@ -279,13 +276,17 @@ def main(configs, parser):
                     "version": "1.0",
                     "challenge": "ego4d_nlq_challenge",
                     "best_eval_model": best_model_step,
-                    "topK": 1,
-                    "threshold IoU": 0.3,
                     "top_50_queries": top_50_queries,
                 },
                 f,
                 indent=4,
             )
+
+        # Create a file txt with one clip_uid per line associated with the top 50 queries
+        with open(os.path.join(model_dir, "top_50_clip_uids.txt"), "w") as f:
+            for query in per_instance_results["queries"]:
+                f.write(query["clip_uid"] + "\n")
+        
         
 
 

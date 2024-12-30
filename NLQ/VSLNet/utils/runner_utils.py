@@ -135,7 +135,7 @@ def eval_test(
         with open(gt_json_path) as file_id:
             ground_truth = json.load(file_id)
         thresholds = [0.3, 0.5, 0.01]
-        topK = [1]
+        topK = [1, 3, 5]
         results, mIoU = ego4d_eval.evaluate_nlq_performance(
             predictions, ground_truth, thresholds, topK
         )
@@ -149,21 +149,6 @@ def eval_test(
         display_results = None
     return results, mIoU, display_results
 
-
-# Function to recursively convert objects to lists
-def convert_object_to_list(obj):
-    if isinstance(obj, np.ndarray):
-        return obj.tolist()
-    elif isinstance(obj, np.bool_):
-        return bool(obj)
-    elif isinstance(obj, (np.integer, np.floating)):
-        return obj.item()
-    elif isinstance(obj, list):
-        return [convert_object_to_list(item) for item in obj]
-    elif isinstance(obj, dict):
-        return {key: convert_object_to_list(value) for key, value in obj.items()}
-    else:
-        return obj
     
 
     
