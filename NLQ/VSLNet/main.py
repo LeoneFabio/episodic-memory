@@ -283,10 +283,13 @@ def main(configs, parser):
             )
 
         # Create a file txt with one clip_uid per line associated with the top 50 queries --> retrieve clip uid from top_50_queries.json file and save to top_50_clip_uids.txt
+        seen_uids = set()  # To keep track of already written UIDs
         with open(os.path.join(model_dir, "top_50_clip_uids.txt"), "w") as f:
             for query in top_50_queries:
-                f.write(query["clip_uid"] + "\n")
-        
+                clip_uid = query["clip_uid"]
+                if clip_uid not in seen_uids:  # Check if the UID is not already written
+                    f.write(clip_uid + "\n")
+                    seen_uids.add(clip_uid)  # Add UID to the set to avoid duplicates
         
 
 
