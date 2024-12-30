@@ -282,9 +282,9 @@ def main(configs, parser):
                 indent=4,
             )
 
-        # Create a file txt with one clip_uid per line associated with the top 50 queries
+        # Create a file txt with one clip_uid per line associated with the top 50 queries --> retrieve clip uid from top_50_queries.json file and save to top_50_clip_uids.txt
         with open(os.path.join(model_dir, "top_50_clip_uids.txt"), "w") as f:
-            for query in per_instance_results["queries"]:
+            for query in top_50_queries:
                 f.write(query["clip_uid"] + "\n")
         
         
