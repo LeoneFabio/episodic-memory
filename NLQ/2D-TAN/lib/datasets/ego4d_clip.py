@@ -36,19 +36,19 @@ class Ego4DClip(data.Dataset):
         # load annotations
         if split == "train":
             anno_path = os.path.join(self.data_dir, "nlq_train.json")
-        elif split == "val":  # use val set for test
+        elif split == "val":  
             anno_path = os.path.join(self.data_dir, "nlq_val.json")
-        elif split == "test":  # TODO delete this line for final release
-            anno_path = os.path.join(self.data_dir, "nlq_test_unannotated.json") # .json") # _unannotated.json")
+        elif split == "test":  
+            anno_path = os.path.join(self.data_dir, "nlq_test_unannotated.json")
         with open(anno_path) as f:
             anno_json = json.load(f)
 
         NUM_VIDEOS = len(anno_json["videos"])
-        TRAIN_SUBSET_SIZE = NUM_VIDEOS//20 if self.debug else NUM_VIDEOS
-        VAL_SUBSET_SIZE = NUM_VIDEOS//32 if self.debug else NUM_VIDEOS
+        TRAIN_SUBSET_SIZE = NUM_VIDEOS//10 if self.debug else NUM_VIDEOS
+        VAL_SUBSET_SIZE = NUM_VIDEOS//16 if self.debug else NUM_VIDEOS
         anno_pairs = []
         for video_count, anno_video in enumerate(anno_json["videos"]):
-            video_name = anno_video['video_uid'] # anno_clip["clip_uid"]
+            video_name = anno_video['video_uid'] 
             for anno_clip in anno_video["clips"]:
                 clip_times = [float(anno_clip["video_start_sec"]), float(anno_clip["video_end_sec"])]  #
                 clip_duration = clip_times[1] - clip_times[0]
@@ -90,7 +90,7 @@ class Ego4DClip(data.Dataset):
                                     new_anno = {
                                         "video": video_name,
                                         "clip": clip_uid, 
-                                        "clip_se": clip_times, # tart": clip_times[0],
+                                        "clip_se": clip_times, # "start": clip_times[0],
                                         "description": query["query"],
                                         "window": [w_start, w_start + self.window],
                                         "clip_duration": clip_duration,
@@ -128,7 +128,7 @@ class Ego4DClip(data.Dataset):
                                     }
                                     if (
                                         self.temp is None
-                                        or anno_df["query"].values[i]
+                                        or query["query"]
                                         in self.query_template[self.temp]
                                     ):
                                         anno_pairs.append(new_anno)
