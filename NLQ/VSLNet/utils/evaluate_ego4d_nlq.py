@@ -91,7 +91,8 @@ def evaluate_nlq_performance(
             pred_datum["predicted_times"],
             [[gt_query_datum["clip_start_sec"], gt_query_datum["clip_end_sec"]]],
         )
-        IoU = np.mean(np.sort(overlap[0])[-3:]) # IoU of a query, considering the mean of top-3 overlap values --> this is because a single query can have multiple predictions
+        
+        IoU = np.mean(np.sort(overlap[0])[-3:]) 
         all_IoUs.append(IoU)
 
 
