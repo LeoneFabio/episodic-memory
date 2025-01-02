@@ -105,36 +105,35 @@ class Ego4DClip(data.Dataset):
                                         anno_pairs.append(new_anno)
 
                         else:  # val and test set
-                            if self.min_duration > query_duration or query_duration >= self.window or (
-                                not self.debug or video_count < VAL_SUBSET_SIZE # only for debug
+                            if self.min_duration <= query_duration < self.window and (
+                                not self.debug or video_count < VAL_SUBSET_SIZE
                             ):
-                                break
                                 
-                            new_anno = None
-                            if int(clip_duration) - self.window + stride <= stride:
-                                print('warning:', int(clip_duration), self.window, stride)
-                            for w_start in range(
-                                0, int(clip_duration) - self.window + stride, stride
-                            ):
-                                new_anno = {
-                                    "video": video_name,
-                                    "clip": clip_uid, # used in evaluation server
-                                    "clip_se": clip_times,
-                                    "description": query["query"],
-                                    "window": [w_start, w_start + self.window],
-                                    "clip_duration": clip_duration,
-                                    "times": [query_times[0], query_times[1]],
-                                    "query_uid": anno_uid+'_'+str(query_idx),
-                                    "query_idx": query_idx,
-                                }
-                                if (
-                                    self.temp is None
-                                    or anno_df["query"].values[i]
-                                    in self.query_template[self.temp]
+                                new_anno = None
+                                if int(clip_duration) - self.window + stride <= stride:
+                                    print('warning:', int(clip_duration), self.window, stride)
+                                for w_start in range(
+                                    0, int(clip_duration) - self.window + stride, stride
                                 ):
-                                    anno_pairs.append(new_anno)
-                            if new_anno is None:
-                                print('Warning!')
+                                    new_anno = {
+                                        "video": video_name,
+                                        "clip": clip_uid, # used in evaluation server
+                                        "clip_se": clip_times,
+                                        "description": query["query"],
+                                        "window": [w_start, w_start + self.window],
+                                        "clip_duration": clip_duration,
+                                        "times": [query_times[0], query_times[1]],
+                                        "query_uid": anno_uid+'_'+str(query_idx),
+                                        "query_idx": query_idx,
+                                    }
+                                    if (
+                                        self.temp is None
+                                        or anno_df["query"].values[i]
+                                        in self.query_template[self.temp]
+                                    ):
+                                        anno_pairs.append(new_anno)
+                                if new_anno is None:
+                                    print('Warning!')
 
         print(
             " -- collected {} samples for dataset {}".format(
