@@ -43,7 +43,9 @@ class Ego4DClip(data.Dataset):
         with open(anno_path) as f:
             anno_json = json.load(f)
 
-        TRAIN_SUBSET_SIZE = 8
+        NUM_VIDEOS = len(anno_json["videos"])
+        TRAIN_SUBSET_SIZE = NUM_VIDEOS//20 if self.debug else NUM_VIDEOS
+        VAL_SUBSET_SIZE = NUM_VIDEOS//40 if self.debug else NUM_VIDEOS
         anno_pairs = []
         for video_count, anno_video in enumerate(anno_json["videos"]):
             video_name = anno_video['video_uid'] # anno_clip["clip_uid"]
@@ -104,7 +106,7 @@ class Ego4DClip(data.Dataset):
 
                         else:  # val and test set
                             if self.min_duration > query_duration or query_duration >= self.window or (
-                                self.debug and video_count > 1 # only for debug
+                                not self.debug or video_count < VAL_SUBSET_SIZE # only for debug
                             ):
                                 break
                                 
