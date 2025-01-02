@@ -103,7 +103,9 @@ class Ego4DClip(data.Dataset):
                                         anno_pairs.append(new_anno)
 
                         else:  # val and test set
-                            if self.min_duration > query_duration or query_duration >= self.window:
+                            if self.min_duration > query_duration or query_duration >= self.window or (
+                                self.debug and video_count > 1 # only for debug
+                            ):
                                 break
                                 
                             new_anno = None
