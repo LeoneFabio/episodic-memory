@@ -9,9 +9,9 @@ from model.layers import (
     VisualProjection,
     FeatureEncoder,
     CQAttention,
-    CQConcatenate,
+    # CQConcatenate,
     ConditionedPredictor,
-    HighLightLayer,
+    # HighLightLayer,
     BertEmbedding,
 )
 
