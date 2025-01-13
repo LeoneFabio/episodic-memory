@@ -1,0 +1,212 @@
+{
+    "version": "1.0",
+    "challenge": "ego4d_nlq_challenge",
+    "best_eval_model": {
+        "epoch": 9,
+        "step": 3059
+    },
+    "topK": 1,
+    "threshold IoU": 0.3,
+    "top_50_queries": [
+        {
+            "query": "Where is the soap?",
+            "IoU": 0.9940973565843623
+        },
+        {
+            "query": "What vegetables did I chop? ",
+            "IoU": 0.9868421052631579
+        },
+        {
+            "query": "What food did I eat?",
+            "IoU": 0.9749622612045183
+        },
+        {
+            "query": "What did I put in the bowl?",
+            "IoU": 0.9742748888888889
+        },
+        {
+            "query": "where did i put my phone?",
+            "IoU": 0.960676316126553
+        },
+        {
+            "query": "What tool did I use on the machine first ",
+            "IoU": 0.9561378586882882
+        },
+        {
+            "query": "What did I put in the dish?",
+            "IoU": 0.9380770893088682
+        },
+        {
+            "query": "Where was the egg before I picked it?",
+            "IoU": 0.9375
+        },
+        {
+            "query": "What did I pour in the mug?",
+            "IoU": 0.9333146666666668
+        },
+        {
+            "query": "Who did I talk to at the workshop?",
+            "IoU": 0.930464744835785
+        },
+        {
+            "query": "what did l put in the bucket",
+            "IoU": 0.9263555555555555
+        },
+        {
+            "query": "In what location did i see the car?",
+            "IoU": 0.9180406679385673
+        },
+        {
+            "query": "Where is round brush before picked?",
+            "IoU": 0.9178197841993121
+        },
+        {
+            "query": "Where did I wash the rice?",
+            "IoU": 0.9006784677314033
+        },
+        {
+            "query": "What did I take from the fridge?",
+            "IoU": 0.8997308005444775
+        },
+        {
+            "query": "where did  put the clothe before l hanged them",
+            "IoU": 0.8931079455249137
+        },
+        {
+            "query": "How many doughs did i apply egg on?",
+            "IoU": 0.8893057777777778
+        },
+        {
+            "query": "how many clothes did I fold?",
+            "IoU": 0.8719262295081968
+        },
+        {
+            "query": "what napkin did I clean my hands with?",
+            "IoU": 0.8666004919184821
+        },
+        {
+            "query": "How many fuse holders did I pick from the box?",
+            "IoU": 0.859341461812395
+        },
+        {
+            "query": "What did I put on the dog?",
+            "IoU": 0.8513770666666668
+        },
+        {
+            "query": "what did l take in the fridge",
+            "IoU": 0.8452309677419371
+        },
+        {
+            "query": "How many tools did I remove from the bag?",
+            "IoU": 0.8236755645826579
+        },
+        {
+            "query": "Where were the papers before I put them in the empty box?",
+            "IoU": 0.8235294117647058
+        },
+        {
+            "query": "How many nuts did I pick from the black plastic material?",
+            "IoU": 0.8226734874544676
+        },
+        {
+            "query": "what did i put in the cooking pot?",
+            "IoU": 0.8204109493139172
+        },
+        {
+            "query": "where was the refrigerator?",
+            "IoU": 0.8188335929804811
+        },
+        {
+            "query": "What color is the paper I moved with my right hand?",
+            "IoU": 0.8145786666666633
+        },
+        {
+            "query": "What color was the jacket hanged on the wall?",
+            "IoU": 0.811606200272107
+        },
+        {
+            "query": "Did I leave the tap open?",
+            "IoU": 0.8095317333333353
+        },
+        {
+            "query": "How many tools where in the bucket?  ",
+            "IoU": 0.8040902857142864
+        },
+        {
+            "query": "Where is the hand sanitizer?",
+            "IoU": 0.8009334619793617
+        },
+        {
+            "query": "Where did I put the wire?",
+            "IoU": 0.8
+        },
+        {
+            "query": "Who did I interact with when I was standing?",
+            "IoU": 0.8
+        },
+        {
+            "query": "What did I throw in the green bucket?",
+            "IoU": 0.7982826666666673
+        },
+        {
+            "query": "what did i pour in the pan?",
+            "IoU": 0.7978116129032258
+        },
+        {
+            "query": "where is the rice cooker?",
+            "IoU": 0.7927222337011889
+        },
+        {
+            "query": "what did l put in the wood plank",
+            "IoU": 0.7882416347381865
+        },
+        {
+            "query": "What color was the pickup track along the road?",
+            "IoU": 0.781072565957986
+        },
+        {
+            "query": "Who did I talk to in the parking lot?",
+            "IoU": 0.7644000743608389
+        },
+        {
+            "query": "What object did I light",
+            "IoU": 0.7600273333333338
+        },
+        {
+            "query": "What kitchen tool did I cut the springer onions with?",
+            "IoU": 0.7590293333333333
+        },
+        {
+            "query": "How many onions was chopped?",
+            "IoU": 0.7580213903743316
+        },
+        {
+            "query": "How many spoons where in the cooking pot?",
+            "IoU": 0.7369337695427777
+        },
+        {
+            "query": "where did i open the door ",
+            "IoU": 0.7335883668903833
+        },
+        {
+            "query": "What did I pour in the sink?",
+            "IoU": 0.7296516082041571
+        },
+        {
+            "query": "What color were the eggs I mixed?",
+            "IoU": 0.7291501805225663
+        },
+        {
+            "query": "Where was the set of pins before i picked it?",
+            "IoU": 0.7288193480435576
+        },
+        {
+            "query": "In what drawer did I see the screwdrivers?",
+            "IoU": 0.7281624093437774
+        },
+        {
+            "query": "Where did I put tile cutter?",
+            "IoU": 0.7241818347576641
+        }
+    ]
+}
